@@ -1,0 +1,17 @@
+[package]
+name = "fortune-day"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5.7", features = ["derive"] }
+encoding_rs = "0.8.34"
+encoding_rs_io = "0.1.7"
+libc = "0.2.155"
+rand = "0.8.5"
+regex = "1.10.5"
+walkdir = "2.5.0"
+
+[profile.release]
+opt-level = 3
+lto = true
