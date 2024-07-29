@@ -1,0 +1,22 @@
+** fortune-day
+A clone of BSD [[https://en.wikipedia.org/wiki/Fortune_(Unix)][fortune]] command for Unix-like operating systems.
+
+** Usage
+#+begin_src txt
+Usage: fortune-day [COMMAND]
+
+Commands:
+  fortune  Fortune anytime you want
+  search   Search for a keyword in cookie files
+  day      Fortune of a day
+  wait     Wait given amount of time between fortunes in an infinite loop
+  help     Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help  Print help
+#+end_src
+
+You can search more expressive regex patterns, thanks for Rust's [[https://github.com/rust-lang/regex][regex]]
+crate. There is no "censorship" in fortune texts, including but not
+limited to offensive fortunes, "funny" jokes, and such. You can find
+more of them in =fortunes-more= directory.
