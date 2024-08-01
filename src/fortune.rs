@@ -1,4 +1,5 @@
 use std::{
+    borrow::Cow,
     env,
     fs::{self, File},
     io::{BufReader, Read},
@@ -17,16 +18,16 @@ use crate::{
 
 const FORTUNE_DIR: &str = "fortunes";
 
-fn get_fortunes_dir() -> String {
+fn get_fortunes_dir<'a>() -> Cow<'a, str> {
     if let Ok(fortunes) = env::var("FORTUNES_DIR") {
-        fortunes.to_string()
+        fortunes.into()
     } else {
-        FORTUNE_DIR.to_string()
+        Cow::Borrowed(FORTUNE_DIR)
     }
 }
 
 fn get_rand_file() -> Result<String, ()> {
-    if let Ok(dir) = fs::read_dir(get_fortunes_dir()) {
+    if let Ok(dir) = fs::read_dir(&*get_fortunes_dir()) {
         let mut files = Vec::new();
         for file in dir {
             files.push(file.unwrap().path().to_str().unwrap().to_string());
@@ -91,7 +92,7 @@ pub fn get_rand_fortune() -> String {
 
 pub fn get_rand_fortune_from_all() -> Result<String, ()> {
     let mut quotes = Vec::new();
-    let walkdir = WalkDir::new(get_fortunes_dir());
+    let walkdir = WalkDir::new(&*get_fortunes_dir());
 
     for file in walkdir {
         if let Ok(file) = file {
@@ -134,7 +135,7 @@ pub fn get_rand_fortune_from_all() -> Result<String, ()> {
 pub fn search_fortune(pattern: &str, insensitive: bool, show_colors: bool, only_one: bool) {
     let mut contents = Vec::new();
 
-    if let Ok(dir) = fs::read_dir(get_fortunes_dir()) {
+    if let Ok(dir) = fs::read_dir(&*get_fortunes_dir()) {
         for file in dir {
             let content = read_fortune_file(file.unwrap().path().to_str().unwrap());
             contents.push(content);
@@ -183,7 +184,7 @@ pub fn search_fortune(pattern: &str, insensitive: bool, show_colors: bool, only_
 pub fn search_fortune_regex(pattern: &str, insensitive: bool, only_one: bool) {
     let mut contents = Vec::new();
 
-    if let Ok(dir) = fs::read_dir(get_fortunes_dir()) {
+    if let Ok(dir) = fs::read_dir(&*get_fortunes_dir()) {
         for file in dir {
             let content = read_fortune_file(file.unwrap().path().to_str().unwrap());
             contents.push(content);
